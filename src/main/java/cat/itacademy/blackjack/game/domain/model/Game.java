@@ -2,6 +2,8 @@ package cat.itacademy.blackjack.game.domain.model;
 
 import cat.itacademy.blackjack.game.domain.service.DealerService;
 
+import java.util.List;
+
 public class Game {
 
     private final GameId id;
@@ -26,8 +28,14 @@ public class Game {
     }
 
     public static Game start(GameId id, String playerId, Deck deck) {
-        Hand player = new Hand(java.util.List.of(deck.draw(), deck.draw()));
-        Hand dealer = new Hand(java.util.List.of(deck.draw(), deck.draw()));
+
+        Hand player = Hand.empty()
+                .addCard(deck.draw())
+                .addCard(deck.draw());
+
+        Hand dealer = Hand.empty()
+                .addCard(deck.draw());
+
         return new Game(id, playerId, player, dealer, deck, GameStatus.IN_PROGRESS);
     }
 
@@ -78,6 +86,10 @@ public class Game {
 
     public GameStatus status() {
         return status;
+    }
+
+    public Deck getDeck(){
+        return deck;
     }
 
 }
