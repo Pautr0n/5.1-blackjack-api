@@ -8,21 +8,23 @@ import static org.assertj.core.api.Assertions.assertThat;
 class GameHitTest {
 
     private Deck deckWithSafeHit() {
-        return new Deck(List.of(
+        return new DeckFake(List.of(
                 new Card(Rank.TWO, Suit.HEARTS),     // player 1
                 new Card(Rank.THREE, Suit.CLUBS),    // player 2
                 new Card(Rank.TEN, Suit.SPADES),     // dealer 1
                 new Card(Rank.FOUR, Suit.DIAMONDS)   // hit
         ));
+
     }
 
     private Deck deckWithBustHit() {
-        return new Deck(List.of(
+        return new DeckFake(List.of(
                 new Card(Rank.TEN, Suit.HEARTS),     // player 1
-                new Card(Rank.TEN, Suit.CLUBS),     // player 2
-                new Card(Rank.TEN, Suit.SPADES),     // dealer 1
-                new Card(Rank.TEN, Suit.DIAMONDS)   // hit
+                new Card(Rank.NINE, Suit.CLUBS),     // player 2
+                new Card(Rank.TWO, Suit.SPADES),     // dealer 1
+                new Card(Rank.KING, Suit.DIAMONDS)   // hit
         ));
+
     }
 
     @Test
