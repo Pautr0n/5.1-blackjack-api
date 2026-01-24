@@ -27,7 +27,7 @@ public class CreateGameService implements CreateGameUseCase {
     @Override
     public Mono<Game> create(String playerName) {
         return playerRepository.findByName(playerName)
-                .switchIfEmpty(createNewPlayer(playerName))
+                .switchIfEmpty(Mono.defer(()->createNewPlayer(playerName)))
                 .flatMap(player -> {
                     Game game = Game.start(
                             GameId.newId(),
