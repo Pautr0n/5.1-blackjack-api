@@ -5,7 +5,6 @@ import cat.itacademy.blackjack.game.domain.port.out.DeckFactory;
 import cat.itacademy.blackjack.game.domain.port.out.GameRepository;
 import cat.itacademy.blackjack.game.domain.port.out.PlayerInfo;
 import cat.itacademy.blackjack.game.domain.port.out.PlayerLookupPort;
-import cat.itacademy.blackjack.player.domain.model.Player;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -42,10 +41,10 @@ class CreateGameServiceTest {
 
     @Test
     void creates_game_for_existing_player() {
-        String playerName = "Pau";
+        String playerId = "1234";
         PlayerInfo existingPlayer = new PlayerInfo("1234","Pau",0);
 
-        when(playerLookupPort.findByName(anyString()))
+        when(playerLookupPort.findById(anyString()))
                 .thenReturn(Mono.just(existingPlayer));
 
         Deck deck = mock(Deck.class);
@@ -57,14 +56,14 @@ class CreateGameServiceTest {
                 new Card(Rank.FIVE, Suit.SPADES)
         );
 
-        StepVerifier.create(createGameService.create(playerName))
+        StepVerifier.create(createGameService.create(playerId))
                 .assertNext(game -> {
                     assertThat(game.playerId()).isEqualTo(existingPlayer.id());
                     assertThat(game.status()).isEqualTo(GameStatus.IN_PROGRESS);
                 })
                 .verifyComplete();
 
-        verify(playerLookupPort).findByName(anyString());
+        verify(playerLookupPort).findById(anyString());
         verify(deckFactory).create();
         verify(gameRepository).save(any(Game.class));
 
@@ -73,7 +72,7 @@ class CreateGameServiceTest {
     @Test
     void create_game_throw_exception_if_player_does_not_exist(){
 
-        when(playerLookupPort.findByName(anyString()))
+        when(playerLookupPort.findById(anyString()))
                 .thenReturn(Mono.empty());
 
         StepVerifier.create(createGameService.create("NonExistingPlayer"))
@@ -81,7 +80,7 @@ class CreateGameServiceTest {
                 .expectErrorMessage("Player does not exist")
                 .verify();
 
-        verify(playerLookupPort).findByName(anyString());
+        verify(playerLookupPort).findById(anyString());
         verify(gameRepository, never()).save(any(Game.class));
     }
 
@@ -91,7 +90,7 @@ class CreateGameServiceTest {
         String playerName = "Pau";
         PlayerInfo existingPlayer = new PlayerInfo("1234","Pau",0);
 
-        when(playerLookupPort.findByName(eq(playerName)))
+        when(playerLookupPort.findById(eq(playerName)))
                 .thenReturn(Mono.just(existingPlayer));
 
         Deck deck = mock(Deck.class);
