@@ -9,7 +9,7 @@ import reactor.core.publisher.Mono;
 
 public class CreatePlayerService implements CreatePlayerUseCase {
 
-    private PlayerRepository playerRepository;
+    private final PlayerRepository playerRepository;
 
     public CreatePlayerService(PlayerRepository playerRepository) {
         this.playerRepository = playerRepository;
