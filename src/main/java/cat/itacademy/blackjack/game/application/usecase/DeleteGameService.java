@@ -1,5 +1,6 @@
 package cat.itacademy.blackjack.game.application.usecase;
 
+import cat.itacademy.blackjack.game.domain.model.GameId;
 import cat.itacademy.blackjack.game.domain.port.in.DeleteGameUseCase;
 import cat.itacademy.blackjack.game.domain.port.out.GameRepository;
 import reactor.core.publisher.Mono;
@@ -14,7 +15,7 @@ public class DeleteGameService implements DeleteGameUseCase {
 
     @Override
     public Mono<Void> deleteById(String gameId) {
-        return gameRepository.deleteById(gameId);
+        return gameRepository.deleteById(new GameId(gameId));
     }
 
 }

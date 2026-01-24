@@ -1,5 +1,6 @@
 package cat.itacademy.blackjack.game.application.usecase;
 
+import cat.itacademy.blackjack.game.domain.model.GameId;
 import cat.itacademy.blackjack.game.domain.port.out.GameRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,11 +25,11 @@ class DeleteGameServiceTest {
     @Test
     void deleteById_completes_even_if_game_not_exist(){
 
-        String gameId = "game-123";
+        GameId gameId = new GameId("game-123");
 
         when(gameRepository.deleteById(gameId)).thenReturn(Mono.empty());
 
-        StepVerifier.create(deleteGameService.deleteById(gameId))
+        StepVerifier.create(deleteGameService.deleteById("game-123"))
                 .verifyComplete();
 
         verify(gameRepository).deleteById(gameId);

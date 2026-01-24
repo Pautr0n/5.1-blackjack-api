@@ -46,10 +46,10 @@ class GameHitTest {
         String playerId = "player-123";
 
         Game game = Game.start(id, playerId, deck);
-        int before = game.getDeck().getCards().size();
+        int before = game.deck().getCards().size();
 
         Game afterHit = game.hit();
-        int after = afterHit.getDeck().getCards().size();
+        int after = afterHit.deck().getCards().size();
 
         assertThat(after).isEqualTo(before - 1);
     }

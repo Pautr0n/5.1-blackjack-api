@@ -32,7 +32,7 @@ class GameStartTest {
     void starting_a_game_reduces_deck_size_by_three() {
         Game game = Game.start(gameId, playerId, deck);
 
-        assertThat(game.getDeck().getCards()).hasSize(52 - 3);
+        assertThat(game.deck().getCards()).hasSize(52 - 3);
     }
 
     @Test

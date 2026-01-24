@@ -104,7 +104,7 @@ class CreateGameServiceTest {
 
         StepVerifier.create(createGameService.create(playerName))
                 .assertNext(game -> {
-                    assertThat(game.getDeck()).isSameAs(deck);
+                    assertThat(game.deck()).isSameAs(deck);
                 })
                 .verifyComplete();
 

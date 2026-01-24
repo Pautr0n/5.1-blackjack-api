@@ -1,6 +1,7 @@
 package cat.itacademy.blackjack.game.application.usecase;
 
 import cat.itacademy.blackjack.game.domain.model.Game;
+import cat.itacademy.blackjack.game.domain.model.GameId;
 import cat.itacademy.blackjack.game.domain.port.out.GameRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,13 +30,13 @@ class GetGameServiceTest {
 
         Game foundGame = mock(Game.class);
 
-        when(gameRepository.findById(gameId)).thenReturn(Mono.just(foundGame));
+        when(gameRepository.findById(new GameId(gameId))).thenReturn(Mono.just(foundGame));
 
         StepVerifier.create(getGameService.getById(gameId))
                 .expectNext(foundGame)
                 .verifyComplete();
 
-        verify(gameRepository).findById(gameId);
+        verify(gameRepository).findById(new GameId(gameId));
 
     }
 
@@ -43,12 +44,12 @@ class GetGameServiceTest {
     void getById_returns_empty_when_gameId_does_not_exist() {
         String gameId = "game-167";
 
-        when(gameRepository.findById(gameId)).thenReturn(Mono.empty());
+        when(gameRepository.findById(new GameId(gameId))).thenReturn(Mono.empty());
 
         StepVerifier.create(getGameService.getById(gameId))
                 .verifyComplete();
 
-        verify(gameRepository).findById(gameId);
+        verify(gameRepository).findById(new GameId(gameId));
     }
 
 }

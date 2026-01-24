@@ -1,6 +1,7 @@
 package cat.itacademy.blackjack.game.application.usecase;
 
 import cat.itacademy.blackjack.game.domain.model.Game;
+import cat.itacademy.blackjack.game.domain.model.GameId;
 import cat.itacademy.blackjack.game.domain.port.in.PlayCommand;
 import cat.itacademy.blackjack.game.domain.port.in.PlayMoveUseCase;
 import cat.itacademy.blackjack.game.domain.port.out.GameRepository;
@@ -21,7 +22,7 @@ public class PlayMoveService implements PlayMoveUseCase {
     @Override
     public Mono<Game> play(String gameId, PlayCommand command) {
 
-        return gameRepository.findById(gameId)
+        return gameRepository.findById(new GameId(gameId))
                 .flatMap(game -> {
                     Game updated;
                     switch (command.move()) {

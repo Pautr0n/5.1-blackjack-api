@@ -1,6 +1,7 @@
 package cat.itacademy.blackjack.game.application.usecase;
 
 import cat.itacademy.blackjack.game.domain.model.Game;
+import cat.itacademy.blackjack.game.domain.model.GameId;
 import cat.itacademy.blackjack.game.domain.port.in.PlayCommand;
 import cat.itacademy.blackjack.game.domain.port.out.GameRepository;
 import cat.itacademy.blackjack.game.domain.service.DealerService;
@@ -42,7 +43,7 @@ class PlayMoveServiceTest {
         Game original = mock(Game.class);
         Game updated = mock(Game.class);
 
-        when(gameRepository.findById(gameId))
+        when(gameRepository.findById(new GameId(gameId)))
                 .thenReturn(Mono.just(original));
 
         when(original.hit()).thenReturn(updated);
@@ -51,7 +52,7 @@ class PlayMoveServiceTest {
                 .expectNext(updated)
                 .verifyComplete();
 
-        verify(gameRepository).findById(gameId);
+        verify(gameRepository).findById(new GameId(gameId));
         verify(original).hit();
         verify(gameRepository).save(updated);
         verify(original, never()).stand(any());
@@ -64,7 +65,7 @@ class PlayMoveServiceTest {
         Game original = mock(Game.class);
         Game updated = mock(Game.class);
 
-        when(gameRepository.findById(gameId))
+        when(gameRepository.findById(new GameId(gameId)))
                 .thenReturn(Mono.just(original));
 
         when(original.stand(dealerService)).thenReturn(updated);
@@ -73,7 +74,7 @@ class PlayMoveServiceTest {
                 .expectNext(updated)
                 .verifyComplete();
 
-        verify(gameRepository).findById(gameId);
+        verify(gameRepository).findById(new GameId(gameId));
         verify(original).stand(dealerService);
         verify(gameRepository).save(updated);
         verify(original, never()).hit();
@@ -84,13 +85,13 @@ class PlayMoveServiceTest {
     void play_when_game_not_found_returns_empty() {
         String gameId = "missing";
 
-        when(gameRepository.findById(gameId))
+        when(gameRepository.findById(new GameId(gameId)))
                 .thenReturn(Mono.empty());
 
         StepVerifier.create(playMoveService.play(gameId, new PlayCommand(PlayCommand.Move.HIT)))
                 .verifyComplete();
 
-        verify(gameRepository).findById(gameId);
+        verify(gameRepository).findById(new GameId(gameId));
         verify(gameRepository, never()).save(any());
     }
 }
