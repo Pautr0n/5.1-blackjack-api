@@ -70,11 +70,26 @@ class CreateGameServiceTest {
 
     }
 
+    @Test
+    void create_game_throw_exception_if_player_does_not_exist(){
+
+        when(playerLookupPort.findByName(anyString()))
+                .thenReturn(Mono.empty());
+
+        StepVerifier.create(createGameService.create("NonExistingPlayer"))
+                .expectNextCount(0)
+                .expectErrorMessage("Player does not exist")
+                .verify();
+
+        verify(playerLookupPort).findByName(anyString());
+        verify(gameRepository, never()).save(any(Game.class));
+    }
+
 
     @Test
     void uses_deck_from_factory() {
         String playerName = "Pau";
-        Player existingPlayer = Player.create(playerName);
+        PlayerInfo existingPlayer = new PlayerInfo("1234","Pau",0);
 
         when(playerLookupPort.findByName(eq(playerName)))
                 .thenReturn(Mono.just(existingPlayer));
