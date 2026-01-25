@@ -2,6 +2,7 @@ package cat.itacademy.blackjack.game.infrastructure.out.persistence.mongo;
 
 import cat.itacademy.blackjack.game.domain.model.Game;
 import cat.itacademy.blackjack.game.domain.model.GameId;
+import cat.itacademy.blackjack.game.domain.model.exception.GameNotFoundException;
 import cat.itacademy.blackjack.game.domain.port.out.GameRepository;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Mono;
@@ -25,6 +26,7 @@ public class GameRepositoryAdapter implements GameRepository {
     @Override
     public Mono<Game> findById(GameId id) {
         return repository.findById(id.value())
+                .switchIfEmpty(Mono.error(new GameNotFoundException("Game not found: " + id.value())))
                 .map(GameMapper::toDomain);
     }
 

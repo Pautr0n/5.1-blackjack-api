@@ -1,4 +1,4 @@
 package cat.itacademy.blackjack.game.infrastructure.in.web.dto;
 
-public record CreateGameRequest(String playerName) {
+public record CreateGameRequest(String playerId) {
 }

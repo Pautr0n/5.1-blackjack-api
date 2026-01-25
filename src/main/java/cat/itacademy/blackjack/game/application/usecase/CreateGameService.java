@@ -6,6 +6,7 @@ import cat.itacademy.blackjack.game.domain.port.in.CreateGameUseCase;
 import cat.itacademy.blackjack.game.domain.port.out.DeckFactory;
 import cat.itacademy.blackjack.game.domain.port.out.GameRepository;
 import cat.itacademy.blackjack.game.domain.port.out.PlayerLookupPort;
+import cat.itacademy.blackjack.player.domain.model.exception.PlayerNotFoundException;
 import reactor.core.publisher.Mono;
 
 public class CreateGameService implements CreateGameUseCase {
@@ -26,7 +27,7 @@ public class CreateGameService implements CreateGameUseCase {
     @Override
     public Mono<Game> create(String playerId) {
         return playerLookupPort.findById(playerId)
-                .switchIfEmpty(Mono.error(new RuntimeException("Player does not exist")))
+                .switchIfEmpty(Mono.error(new PlayerNotFoundException("Player does not exist: " + playerId)))
                 .flatMap(playerInfo -> {
                     Game game = Game.start(
                             GameId.newId(),
