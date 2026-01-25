@@ -1,0 +1,5 @@
+CREATE TABLE IF NOT EXISTS players (
+    id VARCHAR(100) PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    score INT NOT NULL
+);

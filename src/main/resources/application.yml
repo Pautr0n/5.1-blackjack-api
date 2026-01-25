@@ -1,0 +1,19 @@
+spring:
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/blackjack
+
+  r2dbc:
+    url: r2dbc:mysql://localhost:3306/blackjack
+    username: blackjack
+    password: blackjack
+
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:schema.sql
+
+logging:
+  level:
+    org.springframework.r2dbc: DEBUG
+    org.springframework.data.mongodb: DEBUG
