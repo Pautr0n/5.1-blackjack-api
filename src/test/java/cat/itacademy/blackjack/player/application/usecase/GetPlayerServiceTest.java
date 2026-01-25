@@ -2,7 +2,6 @@ package cat.itacademy.blackjack.player.application.usecase;
 
 import cat.itacademy.blackjack.player.domain.model.Player;
 import cat.itacademy.blackjack.player.domain.model.PlayerId;
-import cat.itacademy.blackjack.player.domain.port.in.PlayerResponse;
 import cat.itacademy.blackjack.player.domain.port.out.PlayerRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -49,7 +48,7 @@ class GetPlayerServiceTest {
 
         when(playerRepository.findById(id)).thenReturn(Mono.empty());
 
-        Mono<PlayerResponse> result = getPlayerService.getById(id.value());
+        Mono<Player> result = getPlayerService.getById(id.value());
 
         StepVerifier.create(result)
                 .expectErrorMatches(ex -> ex.getMessage().equals("Player not found"))
@@ -57,7 +56,5 @@ class GetPlayerServiceTest {
 
         verify(playerRepository).findById(id);
     }
-
-
 
 }
