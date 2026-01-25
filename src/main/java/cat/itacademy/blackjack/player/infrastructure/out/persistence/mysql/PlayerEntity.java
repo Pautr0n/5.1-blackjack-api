@@ -15,6 +15,8 @@ public class PlayerEntity {
     @Id
     private String id;
 
+    private String domainId;
+
     private String name;
 
     private int score;

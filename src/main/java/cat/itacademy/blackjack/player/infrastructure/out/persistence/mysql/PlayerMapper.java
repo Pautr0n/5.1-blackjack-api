@@ -7,15 +7,17 @@ public class PlayerMapper {
 
     public static PlayerEntity toEntity(Player player) {
         return new PlayerEntity(
+                null,
                 player.id().value(),
                 player.name(),
                 player.score()
         );
     }
 
+
     public static Player toDomain(PlayerEntity entity) {
         return Player.restore(
-                new PlayerId(entity.getId()),
+                new PlayerId(entity.getDomainId()),
                 entity.getName(),
                 entity.getScore()
         );
