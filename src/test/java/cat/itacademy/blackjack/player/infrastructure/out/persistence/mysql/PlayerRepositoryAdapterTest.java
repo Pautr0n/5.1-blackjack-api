@@ -2,7 +2,6 @@ package cat.itacademy.blackjack.player.infrastructure.out.persistence.mysql;
 
 import cat.itacademy.blackjack.player.domain.model.Player;
 import cat.itacademy.blackjack.player.domain.model.PlayerId;
-import cat.itacademy.blackjack.player.domain.port.out.PlayerRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
