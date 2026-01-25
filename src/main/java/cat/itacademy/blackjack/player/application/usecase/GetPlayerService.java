@@ -1,5 +1,6 @@
 package cat.itacademy.blackjack.player.application.usecase;
 
+import cat.itacademy.blackjack.player.domain.model.Player;
 import cat.itacademy.blackjack.player.domain.model.PlayerId;
 import cat.itacademy.blackjack.player.domain.model.exception.PlayerNotFoundException;
 import cat.itacademy.blackjack.player.domain.port.in.GetPlayerUseCase;
@@ -16,16 +17,11 @@ public class GetPlayerService implements GetPlayerUseCase {
     }
 
     @Override
-    public Mono<PlayerResponse> getById(String id) {
+    public Mono<Player> getById(String id) {
         PlayerId playerId = new PlayerId(id);
-
         return playerRepository.findById(playerId)
-                .switchIfEmpty(Mono.error(new PlayerNotFoundException("Player not found")))
-                .map(player -> new PlayerResponse(
-                        player.id().value(),
-                        player.name(),
-                        player.score()
-                ));
+                .switchIfEmpty(Mono.error(new PlayerNotFoundException("Player not found")));
+
     }
 
 }

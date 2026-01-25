@@ -1,5 +1,7 @@
 package cat.itacademy.blackjack.player.application.usecase;
 
+import cat.itacademy.blackjack.player.domain.model.Player;
+import cat.itacademy.blackjack.player.domain.model.PlayerId;
 import cat.itacademy.blackjack.player.domain.port.in.FindAllPlayersUseCase;
 import cat.itacademy.blackjack.player.domain.port.out.query.PlayerQueryRepository;
 import cat.itacademy.blackjack.player.domain.port.out.query.PlayerSummary;
@@ -14,8 +16,13 @@ public class FindAllPlayersService implements FindAllPlayersUseCase {
     }
 
     @Override
-    public Flux<PlayerSummary> findAll() {
-        return queryRepository.findAll();
+    public Flux<Player> findAll() {
+        return queryRepository.findAll()
+                .map(summary -> Player.restore(
+                        new PlayerId(summary.id()),
+                        summary.name(),
+                        summary.score()
+                ));
     }
 
 }

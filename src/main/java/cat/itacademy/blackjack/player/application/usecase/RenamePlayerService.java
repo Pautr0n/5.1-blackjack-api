@@ -17,20 +17,12 @@ public class RenamePlayerService implements RenamePlayerUseCase {
     }
 
     @Override
-    public Mono<PlayerResponse> rename(String id, String newName) {
+    public Mono<Player> rename(String id, String newName) {
         PlayerId playerId = new PlayerId(id);
-
         return playerRepository.findById(playerId)
                 .switchIfEmpty(Mono.error(new PlayerNotFoundException("Player not found")))
-                .flatMap(player -> {
-                    Player renamed = player.rename(newName);
-                    return playerRepository.save(renamed);
-                })
-                .map(saved -> new PlayerResponse(
-                        saved.id().value(),
-                        saved.name(),
-                        saved.score()
-                ));
+                .flatMap(player -> playerRepository.save(player.rename(newName)));
+
     }
 
 }

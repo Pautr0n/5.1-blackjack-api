@@ -16,15 +16,10 @@ public class CreatePlayerService implements CreatePlayerUseCase {
     }
 
     @Override
-    public Mono<PlayerResponse> create(String playerName) {
+    public Mono<Player> create(String playerName) {
 
         Player player = Player.create(playerName);
+        return playerRepository.save(player);
 
-        return playerRepository.save(player)
-                .map(savedPlayer -> new PlayerResponse(
-                        savedPlayer.id().value(),
-                        savedPlayer.name(),
-                        savedPlayer.score()
-                ) );
     }
 }

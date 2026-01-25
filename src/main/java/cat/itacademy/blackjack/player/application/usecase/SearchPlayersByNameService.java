@@ -1,5 +1,7 @@
 package cat.itacademy.blackjack.player.application.usecase;
 
+import cat.itacademy.blackjack.player.domain.model.Player;
+import cat.itacademy.blackjack.player.domain.model.PlayerId;
 import cat.itacademy.blackjack.player.domain.port.in.SearchPlayerByNameUseCase;
 import cat.itacademy.blackjack.player.domain.port.out.query.PlayerQueryRepository;
 import cat.itacademy.blackjack.player.domain.port.out.query.PlayerSummary;
@@ -14,8 +16,14 @@ public class SearchPlayersByNameService implements SearchPlayerByNameUseCase {
     }
 
     @Override
-    public Flux<PlayerSummary> searchByName(String partialName) {
-        return queryRepository.searchByName(partialName);
+    public Flux<Player> searchByName(String partialName) {
+        return queryRepository.searchByName(partialName)
+                .map(summary -> Player.restore(
+                        new PlayerId(summary.id()),
+                        summary.name(),
+                        summary.score()
+                ));
+
     }
 
 }
