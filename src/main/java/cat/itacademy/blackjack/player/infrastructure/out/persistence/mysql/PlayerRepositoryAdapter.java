@@ -3,8 +3,10 @@ package cat.itacademy.blackjack.player.infrastructure.out.persistence.mysql;
 import cat.itacademy.blackjack.player.domain.model.Player;
 import cat.itacademy.blackjack.player.domain.model.PlayerId;
 import cat.itacademy.blackjack.player.domain.port.out.PlayerRepository;
+import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Mono;
 
+@Repository
 public class PlayerRepositoryAdapter implements PlayerRepository {
 
     private final SpringDataPlayerRepository repository;
@@ -15,7 +17,7 @@ public class PlayerRepositoryAdapter implements PlayerRepository {
 
     @Override
     public Mono<Player> findById(PlayerId id) {
-        return repository.findById(id.value())
+        return repository.findByDomainId(id.value())
                 .map(PlayerMapper::toDomain);
     }
 
