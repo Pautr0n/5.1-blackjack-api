@@ -8,7 +8,7 @@ public class GameApiMapper {
     public static GameResponse fromDomain(Game game) {
         return new GameResponse(
                 game.id().value(),
-                game.playerId(),
+                game.playerId().value(),
                 game.status().name(),
                 game.playerHand().score(),
                 game.dealerHand().score()

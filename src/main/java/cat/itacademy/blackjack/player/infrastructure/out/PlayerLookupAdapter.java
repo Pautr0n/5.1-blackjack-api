@@ -2,6 +2,7 @@ package cat.itacademy.blackjack.player.infrastructure.out;
 
 import cat.itacademy.blackjack.game.domain.port.out.PlayerInfo;
 import cat.itacademy.blackjack.game.domain.port.out.PlayerLookupPort;
+import cat.itacademy.blackjack.player.domain.model.PlayerId;
 import cat.itacademy.blackjack.player.domain.port.out.query.PlayerQueryRepository;
 import reactor.core.publisher.Mono;
 
@@ -16,7 +17,7 @@ public class PlayerLookupAdapter implements PlayerLookupPort {
     public Mono<PlayerInfo> findById(String playerId) {
         return queryRepository.findById(playerId)
                 .map(summary -> new PlayerInfo(
-                        summary.domainId(),
+                        new PlayerId(summary.domainId()),
                         summary.name(),
                         summary.score()
                 ));

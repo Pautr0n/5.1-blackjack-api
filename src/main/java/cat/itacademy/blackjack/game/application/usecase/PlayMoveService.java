@@ -38,9 +38,11 @@ public class PlayMoveService implements PlayMoveUseCase {
 
                     return gameRepository.save(updated)
                             .flatMap(savedGame -> {
-                                // If game is finished and player won, award points
                                 if (savedGame.isFinished() && savedGame.isPlayerWinner()) {
-                                    return updatePlayerScorePort.addScore(savedGame.playerId(), WIN_POINTS)
+                                    return updatePlayerScorePort.addScore(
+                                                    savedGame.playerId().value(),
+                                                    WIN_POINTS
+                                            )
                                             .thenReturn(savedGame);
                                 }
                                 return Mono.just(savedGame);

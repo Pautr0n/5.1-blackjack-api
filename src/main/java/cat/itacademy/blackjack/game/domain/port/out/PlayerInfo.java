@@ -1,6 +1,8 @@
 package cat.itacademy.blackjack.game.domain.port.out;
 
-public record PlayerInfo(String domainId,
+import cat.itacademy.blackjack.player.domain.model.PlayerId;
+
+public record PlayerInfo(PlayerId playerId,
                          String name,
                          int score
 ) {
