@@ -12,8 +12,8 @@ public class OpenApiConfig {
         return new OpenAPI()
                 .info(new Info()
                         .title("Blackjack API")
-                        .version("v1")
-                        .description("Reactive Blackjack API using Spring WebFlux"));
+                        .description("API for Blackjack game and player management")
+                        .version("1.0.0"));
     }
 
 }
