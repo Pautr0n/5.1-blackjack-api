@@ -16,7 +16,7 @@ public class PlayerLookupAdapter implements PlayerLookupPort {
     public Mono<PlayerInfo> findById(String playerId) {
         return queryRepository.findById(playerId)
                 .map(summary -> new PlayerInfo(
-                        summary.id(),
+                        summary.domainId(),
                         summary.name(),
                         summary.score()
                 ));

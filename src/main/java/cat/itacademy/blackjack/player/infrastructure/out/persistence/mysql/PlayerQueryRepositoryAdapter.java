@@ -46,7 +46,7 @@ public class PlayerQueryRepositoryAdapter implements PlayerQueryRepository {
 
     private PlayerSummary toSummary(PlayerEntity entity) {
         return new PlayerSummary(
-                entity.getId(),
+                entity.getDomainId(),
                 entity.getName(),
                 entity.getScore()
         );
