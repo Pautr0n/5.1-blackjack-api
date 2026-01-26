@@ -4,11 +4,16 @@ import cat.itacademy.blackjack.game.domain.model.exception.GameNotFoundException
 import cat.itacademy.blackjack.player.domain.model.exception.InvalidPlayerNameException;
 import cat.itacademy.blackjack.player.domain.model.exception.InvalidPlayerScoreException;
 import cat.itacademy.blackjack.player.domain.model.exception.PlayerNotFoundException;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import reactor.core.publisher.Mono;
+
+import java.util.stream.Collectors;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -47,6 +52,35 @@ public class GlobalExceptionHandler {
         return Mono.just(new ErrorResponse(
                 "PLAYER_NOT_FOUND",
                 ex.getMessage()
+        ));
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Mono<ErrorResponse> handleValidationErrors(MethodArgumentNotValidException ex) {
+        String message = ex.getBindingResult()
+                .getFieldErrors()
+                .stream()
+                .map(error -> error.getField() + ": " + error.getDefaultMessage())
+                .collect(Collectors.joining(", "));
+
+        return Mono.just(new ErrorResponse(
+                "VALIDATION_ERROR",
+                message
+        ));
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Mono<ErrorResponse> handleConstraintViolation(ConstraintViolationException ex) {
+        String message = ex.getConstraintViolations()
+                .stream()
+                .map(ConstraintViolation::getMessage)
+                .collect(Collectors.joining(", "));
+
+        return Mono.just(new ErrorResponse(
+                "VALIDATION_ERROR",
+                message
         ));
     }
 
