@@ -11,8 +11,7 @@ public class PlayerApiMapper {
         return new PlayerResponse(
                 player.id().value(),
                 player.name(),
-                player.score(),
-                null
+                player.score()
         );
     }
 
@@ -28,8 +27,7 @@ public class PlayerApiMapper {
         return new PlayerResponse(
                 summary.id(),
                 summary.name(),
-                summary.score(),
-                null
+                summary.score()
         );
     }
 
