@@ -11,12 +11,13 @@ import cat.itacademy.blackjack.game.domain.port.in.PlayMoveUseCase;
 import cat.itacademy.blackjack.game.domain.port.out.DeckFactory;
 import cat.itacademy.blackjack.game.domain.port.out.GameRepository;
 import cat.itacademy.blackjack.game.domain.port.out.PlayerLookupPort;
+import cat.itacademy.blackjack.game.domain.port.out.UpdatePlayerScorePort;
 import cat.itacademy.blackjack.game.domain.service.DealerService;
 import cat.itacademy.blackjack.game.infrastructure.out.deck.StandardDeckFactory;
 import cat.itacademy.blackjack.game.infrastructure.out.persistence.mongo.GameRepositoryAdapter;
 import cat.itacademy.blackjack.game.infrastructure.out.persistence.mongo.SpringDataGameRepository;
-import cat.itacademy.blackjack.player.domain.port.out.query.PlayerQueryRepository;
-import cat.itacademy.blackjack.player.infrastructure.out.PlayerLookupAdapter;
+import cat.itacademy.blackjack.player.domain.port.out.PlayerRepository;
+import cat.itacademy.blackjack.player.infrastructure.out.UpdatePlayerScoreAdapter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -61,8 +62,15 @@ public class GameConfig {
     }
 
     @Bean
-    public PlayMoveUseCase playMoveUseCase(GameRepository gameRepository, DealerService dealerService) {
-        return new PlayMoveService(gameRepository, dealerService);
+    public UpdatePlayerScorePort updatePlayerScorePort(PlayerRepository playerRepository) {
+        return new UpdatePlayerScoreAdapter(playerRepository);
+    }
+
+    @Bean
+    public PlayMoveUseCase playMoveUseCase(GameRepository gameRepository,
+                                           DealerService dealerService,
+                                           UpdatePlayerScorePort updatePlayerScorePort) {
+        return new PlayMoveService(gameRepository, dealerService, updatePlayerScorePort);
     }
 
 }

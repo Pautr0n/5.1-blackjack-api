@@ -75,6 +75,13 @@ public class Game {
         return GameStatus.PUSH;
     }
 
+    public boolean isPlayerWinner() {
+        return status == GameStatus.PLAYER_WINS || status == GameStatus.DEALER_BUST;
+    }
+
+    public boolean isFinished() {
+        return status != GameStatus.IN_PROGRESS;
+    }
 
     public GameId id() {
         return id;
