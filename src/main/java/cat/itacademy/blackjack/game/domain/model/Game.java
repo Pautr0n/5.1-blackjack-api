@@ -1,18 +1,20 @@
 package cat.itacademy.blackjack.game.domain.model;
 
+import cat.itacademy.blackjack.game.domain.model.exception.IllegalGameStateException;
 import cat.itacademy.blackjack.game.domain.service.DealerService;
+import cat.itacademy.blackjack.player.domain.model.PlayerId;
 
 public class Game {
 
     private final GameId id;
-    private final String playerId;
+    private final PlayerId playerId;
     private final Hand playerHand;
     private final Hand dealerHand;
     private final Deck deck;
     private final GameStatus status;
 
     private Game(GameId id,
-                 String playerId,
+                 PlayerId playerId,
                  Hand playerHand,
                  Hand dealerHand,
                  Deck deck,
@@ -25,7 +27,7 @@ public class Game {
         this.status = status;
     }
 
-    public static Game start(GameId id, String playerId, Deck deck) {
+    public static Game start(GameId id, PlayerId playerId, Deck deck) {
 
         Hand player = Hand.empty()
                 .addCard(deck.draw())
@@ -38,7 +40,7 @@ public class Game {
     }
 
     public static Game restore(GameId id,
-                               String playerId,
+                               PlayerId playerId,
                                Hand playerHand,
                                Hand dealerHand,
                                Deck deck,
@@ -49,7 +51,9 @@ public class Game {
 
     public Game hit() {
         if (status != GameStatus.IN_PROGRESS) {
-            return this;
+            throw new IllegalGameStateException(
+                    "Cannot hit when game is not in progress. Current status: " + status
+            );
         }
         Hand newPlayerHand = playerHand.addCard(deck.draw());
         GameStatus newStatus = newPlayerHand.isBust() ? GameStatus.PLAYER_BUST : status;
@@ -58,7 +62,9 @@ public class Game {
 
     public Game stand(DealerService dealerService) {
         if (status != GameStatus.IN_PROGRESS) {
-            return this;
+            throw new IllegalGameStateException(
+                    "Cannot hit when game is not in progress. Current status: " + status
+            );
         }
 
         Hand finalDealerHand = dealerService.playDealerTurn(dealerHand, deck);
@@ -87,7 +93,7 @@ public class Game {
         return id;
     }
 
-    public String playerId() {
+    public PlayerId playerId() {
         return playerId;
     }
 

@@ -1,6 +1,7 @@
 package cat.itacademy.blackjack.shared.infrastructure.in.web;
 
 import cat.itacademy.blackjack.game.domain.model.exception.GameNotFoundException;
+import cat.itacademy.blackjack.game.domain.model.exception.IllegalGameStateException;
 import cat.itacademy.blackjack.player.domain.model.exception.InvalidPlayerNameException;
 import cat.itacademy.blackjack.player.domain.model.exception.InvalidPlayerScoreException;
 import cat.itacademy.blackjack.player.domain.model.exception.PlayerNotFoundException;
@@ -54,6 +55,17 @@ public class GlobalExceptionHandler {
                 ex.getMessage()
         ));
     }
+
+
+    @ExceptionHandler(IllegalGameStateException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Mono<ErrorResponse> handleIllegalGameState(IllegalGameStateException ex) {
+        return Mono.just(new ErrorResponse(
+                "ILLEGAL_GAME_STATE",
+                ex.getMessage()
+        ));
+    }
+
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
