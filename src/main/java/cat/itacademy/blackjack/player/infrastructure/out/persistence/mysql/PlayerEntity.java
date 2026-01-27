@@ -23,4 +23,6 @@ public class PlayerEntity {
 
     private int score;
 
+    private int totalGames;
+
 }

@@ -3,6 +3,7 @@ package cat.itacademy.blackjack.player.infrastructure.in.web.controller;
 
 import cat.itacademy.blackjack.player.domain.port.in.*;
 import cat.itacademy.blackjack.player.infrastructure.in.web.dto.CreatePlayerRequest;
+import cat.itacademy.blackjack.player.infrastructure.in.web.dto.PlayerRankingResponse;
 import cat.itacademy.blackjack.player.infrastructure.in.web.dto.PlayerResponse;
 import cat.itacademy.blackjack.player.infrastructure.in.web.dto.RenamePlayerRequest;
 import cat.itacademy.blackjack.player.infrastructure.in.web.mapper.PlayerApiMapper;
@@ -111,7 +112,7 @@ public class PlayerController {
                     @ApiResponse(responseCode = "200", description = "Ranking returned successfully")
             }
     )
-    public Flux<PlayerResponse> ranking() {
+    public Flux<PlayerRankingResponse> ranking() {
         return getRanking.getRanking()
                 .map(PlayerApiMapper::fromRanking);
     }

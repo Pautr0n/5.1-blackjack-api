@@ -2,5 +2,6 @@ CREATE TABLE IF NOT EXISTS players (
     id BIGINT PRIMARY KEY AUTO_INCREMENT,
     domain_id VARCHAR(100) NOT NULL UNIQUE,
     name VARCHAR(100) NOT NULL,
-    score INT NOT NULL
+    score INT NOT NULL,
+    total_games INT NOT NULL
 );

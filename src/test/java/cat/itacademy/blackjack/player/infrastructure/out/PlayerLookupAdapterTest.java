@@ -24,7 +24,7 @@ class PlayerLookupAdapterTest {
 
     @Test
     void findById_should_return_player_info_when_player_exists() {
-        PlayerSummary summary = new PlayerSummary("123", "Pau", 50);
+        PlayerSummary summary = new PlayerSummary("123", "Pau", 50,5);
 
         when(queryRepository.findById("123")).thenReturn(Mono.just(summary));
 

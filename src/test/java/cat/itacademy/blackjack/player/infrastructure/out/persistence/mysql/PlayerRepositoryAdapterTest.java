@@ -47,8 +47,8 @@ class PlayerRepositoryAdapterTest {
     @Test
     void save_should_update_existing_player() {
         Player player = Player.create("Pau");
-        PlayerEntity existingEntity = new PlayerEntity("123", player.id().value(), "Pau", 0);
-        PlayerEntity updatedEntity = new PlayerEntity("123", player.id().value(), "Pau", 10);
+        PlayerEntity existingEntity = new PlayerEntity("123", player.id().value(), "Pau", 0,5);
+        PlayerEntity updatedEntity = new PlayerEntity("123", player.id().value(), "Pau", 10,5);
 
         Player updatedPlayer = player.addScore(10);
 

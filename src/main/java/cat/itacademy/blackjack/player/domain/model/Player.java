@@ -2,14 +2,16 @@ package cat.itacademy.blackjack.player.domain.model;
 
 import cat.itacademy.blackjack.player.domain.model.exception.InvalidPlayerNameException;
 import cat.itacademy.blackjack.player.domain.model.exception.InvalidPlayerScoreException;
+import cat.itacademy.blackjack.player.domain.model.exception.InvalidPlayerTotalGamesException;
 
 public class Player {
 
     private final PlayerId id;
     private final String name;
     private final int score;
+    private final int totalGames;
 
-    private Player(PlayerId id, String name, int score) {
+    private Player(PlayerId id, String name, int score, int totalGames) {
         validateId(id);
         validateName(name);
         validateScore(score);
@@ -18,31 +20,38 @@ public class Player {
         this.id = id;
         this.name = normalizeName(name);
         this.score = score;
+        this.totalGames = totalGames;
     }
 
     public static Player create(String name) {
-        return new Player(PlayerId.newId(), name, 0);
+        return new Player(PlayerId.newId(), name, 0, 0);
     }
 
-    public static Player restore(PlayerId playerid, String name, int score){
-        return new Player(playerid, name, score);
+    public static Player restore(PlayerId playerid, String name, int score, int totalGames) {
+        return new Player(playerid, name, score, totalGames);
     }
 
 
     public Player rename(String newName) {
-        return new Player(id, newName, score);
+        return new Player(id, newName, score, totalGames);
     }
 
     public Player addScore(int points) {
-        if (points < 0 ) throw new InvalidPlayerScoreException("Cannot add negative points");
-        return new Player(id, name, score + points);
+        if (points < 0) throw new InvalidPlayerScoreException("Cannot add negative points");
+        return new Player(id, name, score + points, totalGames);
     }
 
-    private void validateId(PlayerId id){
-        if (id==null) throw new IllegalArgumentException("PlayerId cannot be null");
+    public double winRatio() {
+        if (totalGames == 0) return 0.0;
+        return (double) score / totalGames;
     }
 
-    private void validateName(String name){
+
+    private void validateId(PlayerId id) {
+        if (id == null) throw new IllegalArgumentException("PlayerId cannot be null");
+    }
+
+    private void validateName(String name) {
         if (name == null) {
             throw new InvalidPlayerNameException("Player name cannot be null");
         }
@@ -65,6 +74,12 @@ public class Player {
         }
     }
 
+    private void validateTotalGames(int totalGames) {
+        if (totalGames < 0) {
+            throw new InvalidPlayerTotalGamesException("Player total games cannot be negative");
+        }
+    }
+
     private String normalizeName(String name) {
         return name.trim().replaceAll("\\s+", " ");
     }
@@ -81,5 +96,7 @@ public class Player {
     public int score() {
         return score;
     }
+
+    public int totalGames(){return totalGames;}
 
 }

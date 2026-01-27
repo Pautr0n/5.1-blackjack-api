@@ -2,7 +2,6 @@ package cat.itacademy.blackjack.player.application.usecase;
 
 import cat.itacademy.blackjack.player.domain.model.Player;
 import cat.itacademy.blackjack.player.domain.model.exception.InvalidPlayerNameException;
-import cat.itacademy.blackjack.player.domain.port.in.PlayerResponse;
 import cat.itacademy.blackjack.player.domain.port.out.PlayerRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

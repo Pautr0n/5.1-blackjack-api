@@ -24,8 +24,8 @@ class SearchPlayersByNameServiceTest {
 
     @Test
     void searchByName_should_return_flux_with_players_names_matching() {
-        PlayerSummary p1 = new PlayerSummary("1", "Pau", 100);
-        PlayerSummary p2 = new PlayerSummary("2", "Paula", 50);
+        PlayerSummary p1 = new PlayerSummary("1", "Pau", 100,2);
+        PlayerSummary p2 = new PlayerSummary("2", "Paula", 50,50);
 
         when(queryRepository.searchByName("pau"))
                 .thenReturn(Flux.just(p1, p2));

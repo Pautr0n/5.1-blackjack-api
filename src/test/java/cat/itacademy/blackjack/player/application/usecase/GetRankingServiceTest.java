@@ -24,8 +24,8 @@ class GetRankingServiceTest {
 
     @Test
     void shouldReturnRanking() {
-        PlayerRankingEntry p1 = new PlayerRankingEntry("1", "Pau", 100);
-        PlayerRankingEntry p2 = new PlayerRankingEntry("2", "Anna", 80);
+        PlayerRankingEntry p1 = new PlayerRankingEntry("1", "Pau", 100,2,0.8);
+        PlayerRankingEntry p2 = new PlayerRankingEntry("2", "Anna", 80,2,0.7);
 
         when(playerQueryRepository.getRanking()).thenReturn(Flux.just(p1, p2));
 

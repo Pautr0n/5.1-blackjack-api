@@ -3,7 +3,6 @@ package cat.itacademy.blackjack.player.application.usecase;
 import cat.itacademy.blackjack.player.domain.model.Player;
 import cat.itacademy.blackjack.player.domain.model.PlayerId;
 import cat.itacademy.blackjack.player.domain.model.exception.InvalidPlayerScoreException;
-import cat.itacademy.blackjack.player.domain.port.in.PlayerResponse;
 import cat.itacademy.blackjack.player.domain.port.out.PlayerRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -38,7 +37,7 @@ class AddScoreServiceTest {
 
         StepVerifier.create(addScoreService.addScore(id.value(), 10))
                 .assertNext(response -> {
-                    assertThat(response.domainId()).isEqualTo(id.value());
+                    assertThat(response.id()).isEqualTo(id.value());
                     assertThat(response.name()).isEqualTo("Pau");
                     assertThat(response.score()).isEqualTo(10);
                 })
@@ -71,7 +70,7 @@ class AddScoreServiceTest {
 
         when(playerRepository.findById(id)).thenReturn(Mono.just(original));
 
-        Mono<PlayerResponse> result = addScoreService.addScore(id.value(), -5);
+        Mono<Player> result = addScoreService.addScore(id.value(), -5);
 
         StepVerifier.create(result)
                 .expectError(InvalidPlayerScoreException.class)

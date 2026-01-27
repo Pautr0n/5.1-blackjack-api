@@ -10,7 +10,8 @@ public class PlayerMapper {
                 null,
                 player.id().value(),
                 player.name(),
-                player.score()
+                player.score(),
+                player.totalGames()
         );
     }
 
@@ -19,7 +20,8 @@ public class PlayerMapper {
         return Player.restore(
                 new PlayerId(entity.getDomainId()),
                 entity.getName(),
-                entity.getScore()
+                entity.getScore(),
+                entity.getTotalGames()
         );
     }
 

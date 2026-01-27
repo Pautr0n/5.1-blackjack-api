@@ -24,9 +24,9 @@ class FindAllPlayersServiceTest {
 
     @Test
     void findAll_should_return_flux_with_all_players() {
-        PlayerSummary p1 = new PlayerSummary("1", "Pau", 100);
-        PlayerSummary p2 = new PlayerSummary("2", "Anna", 80);
-        PlayerSummary p3 = new PlayerSummary("3","Laura",90);
+        PlayerSummary p1 = new PlayerSummary("1", "Pau", 100, 10);
+        PlayerSummary p2 = new PlayerSummary("2", "Anna", 80,5);
+        PlayerSummary p3 = new PlayerSummary("3","Laura",90,3);
 
         when(queryRepository.findAll())
                 .thenReturn(Flux.just(p1, p2, p3));

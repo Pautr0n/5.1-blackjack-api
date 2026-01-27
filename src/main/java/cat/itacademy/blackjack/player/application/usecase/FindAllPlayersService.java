@@ -21,7 +21,8 @@ public class FindAllPlayersService implements FindAllPlayersUseCase {
                 .map(summary -> Player.restore(
                         new PlayerId(summary.domainId()),
                         summary.name(),
-                        summary.score()
+                        summary.score(),
+                        summary.totalGames()
                 ));
     }
 

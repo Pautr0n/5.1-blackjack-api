@@ -14,7 +14,7 @@ public class PlayMoveService implements PlayMoveUseCase {
     private final GameRepository gameRepository;
     private final DealerService dealerService;
     private final UpdatePlayerScorePort updatePlayerScorePort;
-    private static final int WIN_POINTS = 10;
+    private static final int WIN_POINTS = 1;
 
     public PlayMoveService(GameRepository gameRepository,
                            DealerService dealerService,

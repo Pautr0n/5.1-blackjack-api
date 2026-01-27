@@ -31,12 +31,14 @@ public class PlayerRepositoryAdapter implements PlayerRepository {
                         null,
                         domainId,
                         player.name(),
-                        player.score()
+                        player.score(),
+                        player.totalGames()
                 ))
                 .flatMap(existing->{
                     existing.setDomainId(domainId);
                     existing.setName(player.name());
                     existing.setScore(player.score());
+                    existing.setTotalGames(player.totalGames());
                     return repository.save(existing);
                 })
                 .map(PlayerMapper::toDomain);

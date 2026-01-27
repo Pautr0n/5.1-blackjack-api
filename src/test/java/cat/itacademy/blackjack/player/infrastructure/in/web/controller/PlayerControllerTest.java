@@ -51,7 +51,8 @@ class PlayerControllerTest {
         Player domainPlayer = Player.restore(
                 new PlayerId("123"),
                 "Pau",
-                0
+                0,
+                1
         );
 
         when(createPlayer.create(anyString()))
@@ -74,7 +75,8 @@ class PlayerControllerTest {
         Player domainPlayer = Player.restore(
                 new PlayerId("abc"),
                 "John",
-                10
+                10,
+                1
         );
 
         when(getPlayer.getById(anyString()))
@@ -103,7 +105,7 @@ class PlayerControllerTest {
 
     @Test
     void ranking_returnsListOfPlayers() {
-        PlayerRankingEntry entry = new PlayerRankingEntry("1", "Pau", 50);
+        PlayerRankingEntry entry = new PlayerRankingEntry("1", "Pau", 50,1,0.8);
 
         when(getRanking.getRanking())
                 .thenReturn(Flux.just(entry));
@@ -120,7 +122,7 @@ class PlayerControllerTest {
 
     @Test
     void renamePlayer_returnsPlayerResponse() {
-        Player renamed = Player.restore(new PlayerId("123"), "NewName", 0);
+        Player renamed = Player.restore(new PlayerId("123"), "NewName", 0,2);
 
         when(renamePlayer.rename(anyString(), anyString()))
                 .thenReturn(Mono.just(renamed));
@@ -149,8 +151,8 @@ class PlayerControllerTest {
 
     @Test
     void findAllPlayers_returnsList() {
-        Player p1 = Player.restore(new PlayerId("1"), "Alice", 10);
-        Player p2 = Player.restore(new PlayerId("2"), "Bob", 20);
+        Player p1 = Player.restore(new PlayerId("1"), "Alice", 10,5);
+        Player p2 = Player.restore(new PlayerId("2"), "Bob", 20,6);
 
         when(findAllPlayers.findAll())
                 .thenReturn(Flux.just(p1, p2));
@@ -181,7 +183,7 @@ class PlayerControllerTest {
 
     @Test
     void searchPlayers_returnsList() {
-        Player p = Player.restore(new PlayerId("1"), "Pau", 0);
+        Player p = Player.restore(new PlayerId("1"), "Pau", 0,5);
 
         when(searchPlayers.searchByName(anyString()))
                 .thenReturn(Flux.just(p));

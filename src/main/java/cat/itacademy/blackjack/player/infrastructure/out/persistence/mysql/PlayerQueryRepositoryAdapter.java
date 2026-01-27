@@ -36,19 +36,29 @@ public class PlayerQueryRepositoryAdapter implements PlayerQueryRepository {
     @Override
     public Flux<PlayerRankingEntry> getRanking() {
         return springRepo.findAll()
-                .sort((a, b) -> Integer.compare(b.getScore(), a.getScore()))
-                .map(entity -> new PlayerRankingEntry(
-                        entity.getDomainId(),
-                        entity.getName(),
-                        entity.getScore()
-                ));
+                .map(entity -> {
+                    double winRatio = entity.getTotalGames() == 0
+                            ? 0.0
+                            : (double) entity.getScore() / entity.getTotalGames();
+
+                    return new PlayerRankingEntry(
+                            entity.getDomainId(),
+                            entity.getName(),
+                            entity.getScore(),
+                            entity.getTotalGames(),
+                            winRatio
+                    );
+                })
+                .sort((a, b) -> Double.compare(b.winRatio(), a.winRatio()));
     }
 
     private PlayerSummary toSummary(PlayerEntity entity) {
+
         return new PlayerSummary(
                 entity.getDomainId(),
                 entity.getName(),
-                entity.getScore()
+                entity.getScore(),
+                entity.getTotalGames()
         );
     }
 
