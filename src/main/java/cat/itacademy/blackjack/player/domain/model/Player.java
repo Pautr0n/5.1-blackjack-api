@@ -15,6 +15,7 @@ public class Player {
         validateId(id);
         validateName(name);
         validateScore(score);
+        validateScore(totalGames);
 
 
         this.id = id;
@@ -43,7 +44,7 @@ public class Player {
 
     public Player addGames(int games) {
         if (games < 0) throw new InvalidPlayerTotalGamesException("Cannot add negative games");
-        return new Player(id, name, totalGames + games, totalGames);
+        return new Player(id, name, score, totalGames + games);
     }
 
     private void validateId(PlayerId id) {
