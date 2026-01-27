@@ -1,4 +1,5 @@
 package cat.itacademy.blackjack.game.domain.model;
+import cat.itacademy.blackjack.player.domain.model.PlayerId;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -31,7 +32,7 @@ class GameHitTest {
     void hit_adds_one_card_to_player_hand() {
         Deck deck = deckWithSafeHit();
         GameId id = GameId.newId();
-        String playerId = "player-123";
+        PlayerId playerId = new PlayerId("player-123");
 
         Game game = Game.start(id, playerId, deck);
         Game afterHit = game.hit();
@@ -43,7 +44,7 @@ class GameHitTest {
     void hit_reduces_deck_size_by_one() {
         Deck deck = deckWithSafeHit();
         GameId id = GameId.newId();
-        String playerId = "player-123";
+        PlayerId playerId = new PlayerId("player-123");
 
         Game game = Game.start(id, playerId, deck);
         int before = game.deck().getCards().size();
@@ -58,7 +59,7 @@ class GameHitTest {
     void hit_returns_new_game_instance() {
         Deck deck = deckWithSafeHit();
         GameId id = GameId.newId();
-        String playerId = "player-123";
+        PlayerId playerId = new PlayerId("player-123");
 
         Game game = Game.start(id, playerId, deck);
         Game afterHit = game.hit();
@@ -70,7 +71,7 @@ class GameHitTest {
     void hit_keeps_game_in_progress_if_player_does_not_bust() {
         Deck deck = deckWithSafeHit();
         GameId id = GameId.newId();
-        String playerId = "player-123";
+        PlayerId playerId = new PlayerId("player-123");
 
         Game game = Game.start(id, playerId, deck);
         Game afterHit = game.hit();
@@ -82,7 +83,7 @@ class GameHitTest {
     void hit_sets_status_to_player_bust_when_player_busts() {
         Deck deck = deckWithBustHit();
         GameId id = GameId.newId();
-        String playerId = "player-123";
+        PlayerId playerId = new PlayerId("player-123");
 
         Game game = Game.start(id, playerId, deck);
         Game afterHit = game.hit();

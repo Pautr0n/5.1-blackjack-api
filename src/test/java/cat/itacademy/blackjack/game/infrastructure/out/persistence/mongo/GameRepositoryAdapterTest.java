@@ -3,6 +3,7 @@ package cat.itacademy.blackjack.game.infrastructure.out.persistence.mongo;
 import cat.itacademy.blackjack.game.domain.model.Deck;
 import cat.itacademy.blackjack.game.domain.model.Game;
 import cat.itacademy.blackjack.game.domain.model.GameId;
+import cat.itacademy.blackjack.player.domain.model.PlayerId;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -33,7 +34,8 @@ class GameRepositoryAdapterTest {
 
     @Test
     void save_should_save_And_return_game() {
-        Game game = Game.start(GameId.newId(), "123", deck);
+        PlayerId playerId = new PlayerId("123");
+        Game game = Game.start(GameId.newId(), playerId, deck);
         GameDocument doc = GameMapper.toDocument(game);
 
         when(mongoRepo.save(any(GameDocument.class))).thenReturn(Mono.just(doc));
@@ -41,7 +43,7 @@ class GameRepositoryAdapterTest {
         StepVerifier.create(adapter.save(game))
                 .assertNext(saved -> {
                     assertThat(saved.id()).isEqualTo(game.id());
-                    assertThat(saved.playerId()).isEqualTo("123");
+                    assertThat(saved.playerId().value()).isEqualTo("123");
                 })
                 .verifyComplete();
 
@@ -50,7 +52,8 @@ class GameRepositoryAdapterTest {
 
     @Test
     void findById_should_return_game_when_found() {
-        Game game = Game.start(GameId.newId(), "123", deck);
+        PlayerId playerId = new PlayerId("123");
+        Game game = Game.start(GameId.newId(), playerId, deck);
         GameDocument doc = GameMapper.toDocument(game);
 
         when(mongoRepo.findById(game.id().value())).thenReturn(Mono.just(doc));
@@ -58,7 +61,7 @@ class GameRepositoryAdapterTest {
         StepVerifier.create(adapter.findById(game.id()))
                 .assertNext(found -> {
                     assertThat(found.id()).isEqualTo(game.id());
-                    assertThat(found.playerId()).isEqualTo("123");
+                    assertThat(found.playerId().value()).isEqualTo("123");
                 })
                 .verifyComplete();
 

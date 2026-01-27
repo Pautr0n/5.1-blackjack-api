@@ -10,6 +10,8 @@ import cat.itacademy.blackjack.game.domain.port.in.GetGameUseCase;
 import cat.itacademy.blackjack.game.domain.port.in.PlayMoveUseCase;
 import cat.itacademy.blackjack.game.infrastructure.in.web.dto.CreateGameRequest;
 import cat.itacademy.blackjack.game.infrastructure.in.web.dto.PlayRequest;
+import cat.itacademy.blackjack.player.domain.model.PlayerId;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
@@ -38,20 +40,27 @@ class GameControllerTest {
     @MockBean
     DeleteGameUseCase deleteGame;
 
+    private static PlayerId playerId;
+
+    @BeforeAll
+    static void setup(){
+        playerId = new PlayerId("player-123");
+    }
+
     @Test
     void create_game_returns_GameResponse() {
-        Game domainGame = Game.start(GameId.newId(), "1224", new Deck(Deck.standard52Cards()));
+        Game domainGame = Game.start(GameId.newId(), playerId, new Deck(Deck.standard52Cards()));
 
         when(createGame.create(anyString())).thenReturn(Mono.just(domainGame));
 
         webTestClient.post()
                 .uri("/game/new")
-                .bodyValue(new CreateGameRequest("1224"))
+                .bodyValue(new CreateGameRequest("player-123"))
                 .exchange()
                 .expectStatus().isCreated()
                 .expectBody()
                 .jsonPath("$.id").isEqualTo(domainGame.id().value())
-                .jsonPath("$.playerId").isEqualTo("1224")
+                .jsonPath("$.playerId").isEqualTo("player-123")
                 .jsonPath("$.status").isEqualTo("IN_PROGRESS");
 
 
@@ -61,7 +70,7 @@ class GameControllerTest {
     void getGame_returns_GameResponse() {
         Game domainGame = Game.start(
                 new GameId("g1"),
-                "p1",
+                playerId,
                 new Deck(Deck.standard52Cards())
         );
 
@@ -74,7 +83,7 @@ class GameControllerTest {
                 .expectStatus().isOk()
                 .expectBody()
                 .jsonPath("$.id").isEqualTo("g1")
-                .jsonPath("$.playerId").isEqualTo("p1");
+                .jsonPath("$.playerId").isEqualTo("player-123");
     }
 
     @Test
@@ -92,7 +101,7 @@ class GameControllerTest {
     void playMove_hit_returns_UpdatedGame() {
         Game updatedGame = Game.start(
                 new GameId("g1"),
-                "p1",
+                playerId,
                 new Deck(Deck.standard52Cards())
         ).hit();
 
@@ -113,7 +122,7 @@ class GameControllerTest {
     void playMove_stand_returnsUpdatedGame() {
         Game updatedGame = Game.start(
                 new GameId("g1"),
-                "p1",
+                playerId,
                 new Deck(Deck.standard52Cards())
         );
 

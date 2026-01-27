@@ -1,6 +1,7 @@
 package cat.itacademy.blackjack.game.domain.model;
 
 import cat.itacademy.blackjack.game.domain.service.DealerService;
+import cat.itacademy.blackjack.player.domain.model.PlayerId;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -58,7 +59,7 @@ class GameStandTest {
     void stand_returns_new_game_instance() {
         DeckFake deck = deckWhereDealerBeatsPlayer();
         GameId id = GameId.newId();
-        String playerId = "player-123";
+        PlayerId playerId = new PlayerId("player-123");
 
         Game game = Game.start(id, playerId, deck);
         Game afterStand = game.stand(dealerService);
@@ -70,7 +71,7 @@ class GameStandTest {
     void stand_sets_status_to_dealer_wins_when_dealer_beats_player() {
         DeckFake deck = deckWhereDealerBeatsPlayer();
         GameId id = GameId.newId();
-        String playerId = "player-123";
+        PlayerId playerId = new PlayerId("player-123");
 
         Game game = Game.start(id, playerId, deck);
         Game afterStand = game.stand(dealerService);
@@ -82,7 +83,7 @@ class GameStandTest {
     void stand_sets_status_to_player_wins_when_player_beats_dealer() {
         DeckFake deck = deckWherePlayerBeatsDealer();
         GameId id = GameId.newId();
-        String playerId = "player-123";
+        PlayerId playerId = new PlayerId("player-123");
 
         Game game = Game.start(id, playerId, deck);
         Game afterStand = game.stand(dealerService);
@@ -94,7 +95,7 @@ class GameStandTest {
     void stand_sets_status_to_dealer_bust_when_dealer_exceeds_21() {
         DeckFake deck = deckWhereDealerBusts();
         GameId id = GameId.newId();
-        String playerId = "player-123";
+        PlayerId playerId = new PlayerId("player-123");
 
         Game game = Game.start(id, playerId, deck);
         Game afterStand = game.stand(dealerService);
@@ -106,7 +107,7 @@ class GameStandTest {
     void stand_sets_status_to_dealer_bust_when_dealer_and_player_has_same_score(){
         DeckFake deck = deckWherePush();
         GameId id = GameId.newId();
-        String playerId = "player-123";
+        PlayerId playerId = new PlayerId("player-123");
 
         Game game = Game.start(id, playerId, deck);
         Game afterStand = game.stand(dealerService);

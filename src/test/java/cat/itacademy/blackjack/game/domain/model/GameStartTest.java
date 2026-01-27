@@ -1,5 +1,6 @@
 package cat.itacademy.blackjack.game.domain.model;
 
+import cat.itacademy.blackjack.player.domain.model.PlayerId;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -11,14 +12,14 @@ class GameStartTest {
 
     public Deck deck;
     public GameId gameId;
-    public String playerId;
+    public PlayerId playerId;
 
     @BeforeEach
-    void setUp(){
+    void setUp() {
         List<Card> cards = Deck.standard52Cards();
         deck = new Deck(cards);
         gameId = GameId.newId();
-        playerId = "player-123";
+        playerId = new PlayerId("player-123");
 
     }
 
