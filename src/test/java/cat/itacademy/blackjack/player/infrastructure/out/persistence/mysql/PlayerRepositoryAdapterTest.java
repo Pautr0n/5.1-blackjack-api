@@ -29,6 +29,8 @@ class PlayerRepositoryAdapterTest {
         Player player = Player.create("Pau");
         PlayerEntity entity = PlayerMapper.toEntity(player);
 
+        when(springRepo.findByDomainId(player.id().value())).thenReturn(Mono.empty());
+
         when(springRepo.save(any(PlayerEntity.class))).thenReturn(Mono.just(entity));
 
         StepVerifier.create(adapter.save(player))
@@ -43,11 +45,34 @@ class PlayerRepositoryAdapterTest {
     }
 
     @Test
+    void save_should_update_existing_player() {
+        Player player = Player.create("Pau");
+        PlayerEntity existingEntity = new PlayerEntity("123", player.id().value(), "Pau", 0);
+        PlayerEntity updatedEntity = new PlayerEntity("123", player.id().value(), "Pau", 10);
+
+        Player updatedPlayer = player.addScore(10);
+
+        when(springRepo.findByDomainId(player.id().value())).thenReturn(Mono.just(existingEntity));
+
+        when(springRepo.save(any(PlayerEntity.class))).thenReturn(Mono.just(updatedEntity));
+
+        StepVerifier.create(adapter.save(updatedPlayer))
+                .assertNext(saved -> {
+                    assertThat(saved.id()).isEqualTo(player.id());
+                    assertThat(saved.score()).isEqualTo(10);
+                })
+                .verifyComplete();
+
+        verify(springRepo).findByDomainId(player.id().value());
+        verify(springRepo).save(any(PlayerEntity.class));
+    }
+
+    @Test
     void findById_should_return_player_when_found() {
         Player player = Player.create("Pau");
         PlayerEntity entity = PlayerMapper.toEntity(player);
 
-        when(springRepo.findById(player.id().value())).thenReturn(Mono.just(entity));
+        when(springRepo.findByDomainId(player.id().value())).thenReturn(Mono.just(entity));
 
         StepVerifier.create(adapter.findById(player.id()))
                 .assertNext(found -> {
@@ -56,30 +81,30 @@ class PlayerRepositoryAdapterTest {
                 })
                 .verifyComplete();
 
-        verify(springRepo).findById(player.id().value());
+        verify(springRepo).findByDomainId(player.id().value());
     }
 
     @Test
-    void findById_should_return_empty_when_player_does_not_exist(){
+    void findById_should_return_empty_when_player_does_not_exist() {
 
-        when(springRepo.findById("1234")).thenReturn(Mono.empty());
+        when(springRepo.findByDomainId("1234")).thenReturn(Mono.empty());
 
         StepVerifier.create(adapter.findById(new PlayerId("1234")))
-                .verifyComplete();
+                .verifyErrorMessage("Player not found: 1234");
 
-        verify(springRepo).findById("1234");
+        verify(springRepo).findByDomainId("1234");
     }
 
     @Test
     void deleteById_should_return_empty_always() {
         PlayerId id = PlayerId.newId();
 
-        when(springRepo.deleteById(id.value())).thenReturn(Mono.empty());
+        when(springRepo.deleteByDomainId(id.value())).thenReturn(Mono.empty());
 
         StepVerifier.create(adapter.deleteById(id))
                 .verifyComplete();
 
-        verify(springRepo).deleteById(id.value());
+        verify(springRepo).deleteByDomainId(id.value());
     }
 
 
