@@ -115,5 +115,46 @@ class GameStandTest {
         assertThat(afterStand.status()).isEqualTo(GameStatus.PUSH);
 
     }
+    @Test
+    void stand_throws_exception_when_game_is_finished() {
+        DeckFake deck = deckWhereDealerBeatsPlayer();
+        GameId id = GameId.newId();
+        PlayerId playerId = new PlayerId("player-123");
+
+        Game game = Game.start(id, playerId, deck);
+        Game finishedGame = Game.restore(
+                id,
+                playerId,
+                game.playerHand(),
+                game.dealerHand(),
+                game.deck(),
+                GameStatus.DEALER_WINS
+        );
+
+        org.assertj.core.api.Assertions.assertThatThrownBy(() -> finishedGame.stand(dealerService))
+                .isInstanceOf(cat.itacademy.blackjack.game.domain.model.exception.IllegalGameStateException.class)
+                .hasMessageContaining("Cannot hit when game is not in progress");
+    }
+
+    @Test
+    void stand_throws_exception_when_game_is_player_bust() {
+        DeckFake deck = deckWhereDealerBeatsPlayer();
+        GameId id = GameId.newId();
+        PlayerId playerId = new PlayerId("player-123");
+
+        Game game = Game.start(id, playerId, deck);
+        Game bustGame = Game.restore(
+                id,
+                playerId,
+                game.playerHand(),
+                game.dealerHand(),
+                game.deck(),
+                GameStatus.PLAYER_BUST
+        );
+
+        org.assertj.core.api.Assertions.assertThatThrownBy(() -> bustGame.stand(dealerService))
+                .isInstanceOf(cat.itacademy.blackjack.game.domain.model.exception.IllegalGameStateException.class)
+                .hasMessageContaining("Cannot hit when game is not in progress");
+    }
 
 }
