@@ -4,4 +4,6 @@ import reactor.core.publisher.Mono;
 
 public interface UpdatePlayerScorePort {
     Mono<Void> addScore(String playerDomainId, int points);
+    Mono<Void> addTotalGames(String playerDomainId, int games);
+
 }

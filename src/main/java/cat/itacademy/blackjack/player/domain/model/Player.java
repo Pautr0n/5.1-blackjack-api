@@ -41,11 +41,10 @@ public class Player {
         return new Player(id, name, score + points, totalGames);
     }
 
-    public double winRatio() {
-        if (totalGames == 0) return 0.0;
-        return (double) score / totalGames;
+    public Player addGames(int games) {
+        if (games < 0) throw new InvalidPlayerTotalGamesException("Cannot add negative games");
+        return new Player(id, name, totalGames + games, totalGames);
     }
-
 
     private void validateId(PlayerId id) {
         if (id == null) throw new IllegalArgumentException("PlayerId cannot be null");

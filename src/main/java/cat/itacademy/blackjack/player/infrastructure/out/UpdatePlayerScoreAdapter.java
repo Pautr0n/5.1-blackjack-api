@@ -25,4 +25,16 @@ public class UpdatePlayerScoreAdapter implements UpdatePlayerScorePort {
                 })
                 .then();
     }
+
+    @Override
+    public Mono<Void> addTotalGames(String playerDomainId, int games) {
+        PlayerId playerId = new PlayerId(playerDomainId);
+        return playerRepository.findById(playerId)
+                .switchIfEmpty(Mono.error(new PlayerNotFoundException("Player not found: " + playerDomainId)))
+                .flatMap(player -> {
+                    Player updated = player.addGames(games);
+                    return playerRepository.save(updated);
+                })
+                .then();
+    }
 }
